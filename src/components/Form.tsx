@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 import {
@@ -10,10 +10,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha from "../utils/ReCaptcha";
+import ReCaptchaComponent, { ReCaptchaHandle } from "../utils/ReCaptcha";
 
 const Form = () => {
   const { t } = useTranslation();
+  const recaptchaRef = useRef<ReCaptchaHandle>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { status, message } = useSelector((state: RootState) => state.form);
 
@@ -28,9 +29,14 @@ const Form = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
+    const token = await recaptchaRef.current?.execute();
+    if (!token) {
+      alert("Captcha verification failed");
+      return;
+    }
+    dispatch(submitForm({ ...formData, captcha: token })).then((res) => {
       if (res.type === "form/submitForm/fulfilled") {
         setFormData({ name: "", phone: "", subject: "" });
       }
@@ -59,7 +65,7 @@ const Form = () => {
   return (
     <>
       <div className="absolute top-0 left-0">
-        <ReCaptcha />
+        <ReCaptchaComponent ref={recaptchaRef} />
       </div>
       <motion.form
         onSubmit={handleSubmit}
