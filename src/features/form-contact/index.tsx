@@ -16,7 +16,7 @@ const initialState: FormState = {
 export const submitForm = createAsyncThunk(
   "form/submitForm",
   async (
-    formData: { name: string; phone: string; subject: string },
+    formData: { name: string; phone: string; subject?: string },
     { rejectWithValue }
   ) => {
     try {
