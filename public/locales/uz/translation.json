@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "cases": "Loyihalar",
+    "services": "Xizmatlar",
+    "about": "Biz haqimizda",
+    "partners": "Hamkorlar",
+    "contacts": "Aloqa",
+    "button": "Buttonga qo‘shilish",
+    "contact": "Qo‘ng‘iroq qilish",
+    "request": "Ariza qoldirish"
+  },
+  "contact": {
+    "title": "Loyihangiz bormi?",
+    "subtitle": "Biz bilan bog‘laning.",
+    "phoneNumber": "+998 98 700 80 04",
+    "name": "Ism",
+    "namePlaceholder": "Ismingizni kiriting",
+    "phone": "Telefon",
+    "phonePlaceholder": "Telefon raqamingizni kiriting",
+    "businessField": "Faoliyat sohasi",
+    "businessPlaceholder": "Nima bilan shug‘ullanasiz?",
+    "send": "Yuborish",
+    "sending": "Yuborilmoqda..."
+  },
+  "cases": {
+    "title": "Portfolio",
+    "all": "Barchasi",
+    "branding": "Brending",
+    "marketing": "Marketing",
+    "smm": "SMM",
+    "development": "Saytlar ishlab chiqish"
+  },
+  "partners": {
+    "title": "Hamkorlar",
+    "yourLogo": "Sizning logo"
+  },
+  "servisers": {
+    "title": "Xizmatlar"
+  },
+  "notfound": {
+    "pageTitle": "404 – Sahifa topilmadi",
+    "message": "Kechirasiz, sahifa topilmadi.",
+    "back": "Bosh sahifaga qaytish"
+  },
+  "header": {
+    "header_text": "Kreativ",
+    "header_text2": "marketing agentligi",
+    "header_subtext": "Biz – kuchli, samarali kampaniyalarni yaratuvchi marketing va reklama mutaxassislarimiz. Har bir bosish natija olib kelishi kerak – bizning qadriyatimiz shu."
+  },
+  "service": {
+    "title": "Bizning xizmatlar",
+    "description": "Button agency sizning brendingizga jon baxsh etishga tayyor. Sizga chiroyli grafik dizayn, moslashuvchan veb-sayt yoki samarali marketing strategiyasi kerakmi? Biz sizning kutganingizdan ham yuqori natija berishga intilamiz.",
+    "button": "Xizmatlarni ko‘rish"
+  },
+  "project": {
+    "button": "Loyihalarni ko‘rish"
+  },
+  "about": {
+    "title": "Biz haqimizda bir nechta faktlar",
+    "description": "Button Agency — savdo va daromadni oshiruvchi ishonchli raqamli hamkor. Tizimli ish jarayonlari, halollik, natijalar bilan ishlash.",
+    "mission": "Bizning missiyamiz",
+    "information-1": "O‘zbekiston va MDH davlatlaridagi bizneslarga sifatli kompleks raqamli marketing xizmatlarini taqdim etish. Faqatgina 'chiroyli SMM' emas, balki to‘liq biznesni rivojlantirish.",
+    "information-2": "Biz tizimli, raqamlar asosida, halol ishlaymiz va uzoq muddatli natijaga yo‘naltirilganmiz."
+  },
+  "cronology": {
+    "title": "Yutuqlar xronologiyasi"
+  },
+  "content": {
+    "title": "Fikrlar"
+  },
+  "project_detail": {
+    "title": "Loyiha",
+    "year": "Yaratilgan yil:",
+    "projectType": "Faoliyat sohasi:",
+    "projectTypePlaceholder": "Ko‘rsatilgan xizmatlar:"
+  },
+  "modal_form": {
+    "close": "Yopish",
+    "title": "Formani to‘ldiring — va biz sizning muammoni hal qilamiz.",
+    "name": "Ism",
+    "phone": "Telefon",
+    "businessField": "Faoliyat sohasi",
+    "send": "Yuborish",
+    "sending": "Yuborilmoqda...",
+    "success": "Xabaringiz yuborildi!",
+    "error": "Xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.",
+    "warning": "Iltimos, barcha maydonlarni to‘ldiring."
+  },
+  "modal_request": {
+    "close": "Yopish",
+    "title": "Zerikarli rezyumelarni unuting. Sizdagi super kuchingiz nima va nega aynan bizga kerak — yozing.",
+    "name": "Ism",
+    "phone": "Telefon",
+    "textarea": "Qo‘shimcha xat",
+    "resume": "Rezyume yuklash",
+    "businessField": "Faoliyat sohasi",
+    "send": "Yuborish",
+    "sending": "Yuborilmoqda...",
+    "uploading": "Yuklanmoqda...",
+    "uploaded": "Yuklandi",
+    "resume-b": "Rezyume yuklash"
+  },
+  "contact_page": {
+    "title_1":"Loyihangiz bormi?",
+    "title_2":"Biz bilan bog‘laning."
+  }
+}

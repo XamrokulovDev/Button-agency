@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "cases": "Cases",
+    "services": "Services",
+    "about": "About",
+    "partners": "Partners",
+    "contacts": "Contacts",
+    "button": "Join Button team",
+    "contact": "Call",
+    "request": "Leave a request"
+  },
+  "contact": {
+    "title": "Do you have a project?",
+    "subtitle": "Contact us.",
+    "phoneNumber": "+998 98 700 80 04",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "phone": "Phone",
+    "phonePlaceholder": "Enter your phone number",
+    "businessField": "Business field",
+    "businessPlaceholder": "What do you do?",
+    "send": "Send",
+    "sending": "Sending..."
+  },
+  "cases": {
+    "title": "Portfolio",
+    "all": "All",
+    "branding": "Branding",
+    "marketing": "Marketing",
+    "smm": "SMM",
+    "development": "Website development"
+  },
+  "partners": {
+    "title": "Partners",
+    "yourLogo": "Your logo"
+  },
+  "servisers": {
+    "title": "Services"
+  },
+  "notfound": {
+    "pageTitle": "404 – Page Not Found",
+    "message": "Sorry, page not found.",
+    "back": "Go back to home"
+  },
+  "header": {
+    "header_text": "Creative",
+    "header_text2": "marketing agency",
+    "header_subtext": "We are a team of experts in marketing and advertising, creating powerful and result-driven campaigns. Our value – every click should lead to results."
+  },
+  "service": {
+    "title": "Our Services",
+    "description": "At Button Agency, we are ready to breathe life into your brand. Need attractive graphics, a responsive website, or effective marketing strategies? Our goal is to exceed your expectations and bring your idea to life through creativity and expertise.",
+    "button": "View services"
+  },
+  "project": {
+    "button": "View projects"
+  },
+  "about": {
+    "title": "Some facts about us",
+    "description": "Button Agency is a reliable digital partner for growing sales and profit. Structured process, honesty, system, numbers, and results.",
+    "mission": "Our mission",
+    "information-1": "Give businesses in Uzbekistan and CIS countries access to quality digital marketing and help grow the whole business, not just do 'beautiful SMM'.",
+    "information-2": "We work systemically, with numbers, honestly, and aim for long-term results."
+  },
+  "cronology": {
+    "title": "Timeline of achievements"
+  },
+  "content": {
+    "title": "Reviews"
+  },
+  "project_detail": {
+    "title": "Project",
+    "year": "Year created:",
+    "projectType": "Business field:",
+    "projectTypePlaceholder": "Provided services:"
+  },
+  "modal_form": {
+    "close": "Close",
+    "title": "Fill the form — and we will solve your task.",
+    "name": "Name",
+    "phone": "Phone",
+    "businessField": "Business field",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Your message has been sent!",
+    "error": "An error occurred. Please try again.",
+    "warning": "Please fill in all fields."
+  },
+  "modal_request": {
+    "close": "Close",
+    "title": "Forget boring resumes. Tell us your superpower — and why we need it.",
+    "name": "Name",
+    "phone": "Phone",
+    "textarea": "Cover letter",
+    "resume": "Upload resume",
+    "businessField": "Business field",
+    "send": "Send",
+    "sending": "Sending...",
+    "uploading": "Uploading...",
+    "uploaded": "Uploaded",
+    "resume-b": "Upload resume"
+  },
+  "contact_page": {
+    "title_1":"Do you have a project?",
+    "title_2":"Contact us."
+  }
+}

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Caveat";
+  src: url("./assets/fonts/Caveat-Regular.woff2") format("woff2"),
+       url("./assets/fonts/Caveat-Regular.woff") format("woff");
+}
+
+body {
+  background-color: #1e1e1e10;
+}
+
+@theme {
+    --font-arial: "Arial", sans-serif;
+    --font-inter: "Inter", sans-serif;
+    --font-caveat: "Caveat", cursive;
+}
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden !important;
+}
+
+.PhoneInputCountry {
+  display: none !important;
+}
+
+.PhoneInput {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex;
+  align-items: center;
+}
+
+.PhoneInputInput {
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 0;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 0px;
+}
