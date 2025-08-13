@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
@@ -9,11 +9,12 @@ import {
   FaTimesCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import ReCaptcha from "../utils/ReCaptcha";
+import ReCaptchaComponent, { ReCaptchaHandle } from "../utils/ReCaptcha";
 
 const ModalForm = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const recaptchaRef = useRef<ReCaptchaHandle>(null);
   const { status, message } = useSelector((state: RootState) => state.form);
 
   const [formData, setFormData] = useState({
@@ -36,14 +37,21 @@ const ModalForm = ({ onClose }: { onClose: () => void }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
-      if (res.type === "form/submitForm/fulfilled") {
-        setFormData({ name: "", phone: "", subject: "" });
-        onClose();
-      }
-    });
+
+    const token = await recaptchaRef.current?.execute();
+    if (!token) {
+      alert("Captcha verification failed");
+      return;
+    }
+
+    dispatch(submitForm({ ...formData, captcha: token }))
+      .then((res) => {
+        if (res.type === "form/submitForm/fulfilled") {
+          setFormData({ name: "", phone: "", subject: "" });
+        }
+      });
   };
 
   useEffect(() => {
@@ -67,7 +75,7 @@ const ModalForm = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <>
-      <ReCaptcha />
+      <ReCaptchaComponent ref={recaptchaRef} />
       <motion.div
         onClick={onClose}
         initial={{ opacity: 0 }}

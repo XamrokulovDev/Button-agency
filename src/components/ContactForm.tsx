@@ -1,5 +1,5 @@
 import { motion /*AnimatePresence*/ } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 // import {
@@ -10,11 +10,12 @@ import PhoneInput from "react-phone-number-input";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha from "../utils/ReCaptcha";
+import ReCaptchaComponent, { ReCaptchaHandle } from "../utils/ReCaptcha";
 
 const ContactForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const recaptchaRef = useRef<ReCaptchaHandle>(null);
   const { status, message } = useSelector((state: RootState) => state.form);
 
   const [formData, setFormData] = useState({
@@ -28,13 +29,21 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
-      if (res.type === "form/submitForm/fulfilled") {
-        setFormData({ name: "", phone: "", subject: "" });
-      }
-    });
+
+    const token = await recaptchaRef.current?.execute();
+    if (!token) {
+      alert("Captcha verification failed");
+      return;
+    }
+
+    dispatch(submitForm({ ...formData, captcha: token }))
+      .then((res) => {
+        if (res.type === "form/submitForm/fulfilled") {
+          setFormData({ name: "", phone: "", subject: "" });
+        }
+      });
   };
 
   useEffect(() => {
@@ -58,7 +67,7 @@ const ContactForm = () => {
   
   return (
     <>
-      <ReCaptcha />
+      <ReCaptchaComponent ref={recaptchaRef} />
       <motion.form
         onSubmit={handleSubmit}
         className="bg-[#0000004D] md:p-[40px] rounded-[25px] md:w-[587px] w-full h-full flex flex-col items-center justify-center md:px-[50px] p-4 space-y-5 md:space-y-[22px]"
