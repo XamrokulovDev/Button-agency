@@ -1,65 +1,74 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import PhoneInput from "react-phone-number-input";
-import {
-  FaRegCheckCircle,
-  FaTimesCircle,
-  FaExclamationTriangle,
-} from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../store/store";
-import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha from "../utils/ReCaptcha";
+import type React from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState, useRef } from "react"
+import { useTranslation } from "react-i18next"
+import PhoneInput from "react-phone-number-input"
+import { FaRegCheckCircle, FaTimesCircle, FaExclamationTriangle } from "react-icons/fa"
+import { useDispatch, useSelector } from "react-redux"
+import type { RootState, AppDispatch } from "../store/store"
+import { clearMessage, submitForm } from "../features/form-contact"
+import ReCaptcha, { type ReCaptchaRef } from "../utils/ReCaptcha"
 
 const Form = () => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const { status, message } = useSelector((state: RootState) => state.form);
+  const { t } = useTranslation()
+  const dispatch = useDispatch<AppDispatch>()
+  const { status, message } = useSelector((state: RootState) => state.form)
+
+  const recaptchaRef = useRef<ReCaptchaRef>(null)
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     subject: "",
-  });
+  })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
-      if (res.type === "form/submitForm/fulfilled") {
-        setFormData({ name: "", phone: "", subject: "" });
-      }
-    });
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      const captchaToken = await recaptchaRef.current?.executeAsync()
+
+      dispatch(
+        submitForm({
+          ...formData,
+          captcha: captchaToken,
+        }),
+      ).then((res) => {
+        if (res.type === "form/submitForm/fulfilled") {
+          setFormData({ name: "", phone: "", subject: "" })
+          recaptchaRef.current?.reset()
+        }
+      })
+    } catch (error) {
+      console.error("Captcha error:", error)
+    }
+  }
 
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
-        dispatch(clearMessage());
-      }, 3000);
-      return () => clearTimeout(timer);
+        dispatch(clearMessage())
+      }, 3000)
+      return () => clearTimeout(timer)
     }
-  }, [message, dispatch]);
+  }, [message, dispatch])
 
   const renderIcon = () => {
-    if (status === "success")
-      return <FaRegCheckCircle size={23} className="text-green-500" />;
-    if (status === "error")
-      return <FaTimesCircle size={23} className="text-red-500" />;
-    if (status === "warning")
-      return <FaExclamationTriangle size={23} className="text-orange-500" />;
-    return null;
-  };
+    if (status === "success") return <FaRegCheckCircle size={23} className="text-green-500" />
+    if (status === "error") return <FaTimesCircle size={23} className="text-red-500" />
+    if (status === "warning") return <FaExclamationTriangle size={23} className="text-orange-500" />
+    return null
+  }
 
   return (
     <>
       <div className="absolute top-0 left-0">
-        <ReCaptcha />
+        <ReCaptcha ref={recaptchaRef} />
       </div>
       <motion.form
         onSubmit={handleSubmit}
@@ -150,7 +159,7 @@ const Form = () => {
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
 export default Form;
