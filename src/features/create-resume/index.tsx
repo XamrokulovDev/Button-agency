@@ -38,6 +38,7 @@ export const submitResume = createAsyncThunk<
     data.append('phone', phone);
     data.append('message', message);
     data.append('file', file);
+    data.append('captcha', '6Lck5aMrAAAAAJkw2fax5Tft_JzCeK59qd3BP3vW');
 
     try {
       await axios.post(`${_api}/api/resume-create/`, data, {

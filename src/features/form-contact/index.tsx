@@ -30,6 +30,7 @@ export const submitForm = createAsyncThunk(
         name,
         phone,
         subject,
+        captcha: "6Lck5aMrAAAAAJkw2fax5Tft_JzCeK59qd3BP3vW",
       });
       return i18n.t("modal_form.success");
     } catch (error) {
