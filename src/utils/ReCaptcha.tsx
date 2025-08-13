@@ -1,18 +1,29 @@
-import React, { useRef } from "react";
+import React, { useRef, useImperativeHandle, forwardRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
-const ReCaptcha: React.FC = () => {
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
-  return (
-    <div>
-      <ReCAPTCHA
-        ref={recaptchaRef}
-        sitekey={siteKey}
-        size="invisible"
-      />
-    </div>
-  );
+export type ReCaptchaHandle = {
+  execute: () => Promise<string | null>;
 };
 
-export default ReCaptcha;
+const ReCaptchaComponent = forwardRef<ReCaptchaHandle>((_, ref) => {
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
+
+  useImperativeHandle(ref, () => ({
+    execute: () =>
+      new Promise((resolve) => {
+        if (recaptchaRef.current) {
+          recaptchaRef.current.executeAsync().then((token) => {
+            resolve(token || null);
+            recaptchaRef.current?.reset(); // optional: reset after use
+          });
+        } else {
+          resolve(null);
+        }
+      }),
+  }));
+
+  return <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} size="invisible" />;
+});
+
+export default ReCaptchaComponent;
