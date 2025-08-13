@@ -16,11 +16,11 @@ const initialState: FormState = {
 export const submitForm = createAsyncThunk(
   "form/submitForm",
   async (
-    formData: { name: string; phone: string; subject: string },
+    formData: { name: string; phone: string; subject: string; captcha: string },
     { rejectWithValue }
   ) => {
     try {
-      const { name, phone, subject } = formData;
+      const { name, phone, subject, captcha } = formData;
 
       if (!name || !phone || !subject) {
         return rejectWithValue(i18n.t("modal_form.warning"));
@@ -30,7 +30,9 @@ export const submitForm = createAsyncThunk(
         name,
         phone,
         subject,
+        captcha,
       });
+
       return i18n.t("modal_form.success");
     } catch (error) {
       return rejectWithValue(i18n.t("modal_form.error") + error);

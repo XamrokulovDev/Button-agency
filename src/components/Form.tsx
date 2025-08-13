@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 import {
@@ -10,12 +10,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha from "../utils/ReCaptcha";
+import ReCaptcha, { ReCaptchaRef } from "../utils/ReCaptcha";
 
 const Form = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { status, message } = useSelector((state: RootState) => state.form);
+
+  const captchaRef = useRef<ReCaptchaRef>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,9 +30,17 @@ const Form = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
+
+    // Captcha token olish
+    const token = await captchaRef.current?.execute();
+    if (!token) {
+      alert("Iltimos, captcha'dan o'ting");
+      return;
+    }
+
+    dispatch(submitForm({ ...formData, captcha: token })).then((res) => {
       if (res.type === "form/submitForm/fulfilled") {
         setFormData({ name: "", phone: "", subject: "" });
       }
@@ -58,9 +68,11 @@ const Form = () => {
 
   return (
     <>
+      {/* Captcha */}
       <div className="absolute top-0 left-0">
-        <ReCaptcha />
+        <ReCaptcha ref={captchaRef} />
       </div>
+
       <motion.form
         onSubmit={handleSubmit}
         className="bg-white md:px-20 p-4 space-y-5 md:space-y-10 rounded-[25px] w-full h-full shadow-lg flex flex-col items-center justify-center"
@@ -82,6 +94,7 @@ const Form = () => {
               className="w-full h-[50px] bg-[#F4F4F4] border border-[#E8003D] rounded-full outline-none px-4"
             />
           </div>
+
           <div className="w-full md:w-[48%]">
             <label
               htmlFor="phone"
@@ -108,6 +121,7 @@ const Form = () => {
             </div>
           </div>
         </div>
+
         <div className="w-full flex flex-col md:flex-row items-end md:justify-between gap-5">
           <div className="w-full md:w-[48%]">
             <label
@@ -125,6 +139,7 @@ const Form = () => {
               className="w-full h-[50px] bg-[#F4F4F4] border border-[#E8003D] rounded-full outline-none px-4"
             />
           </div>
+
           <div className="w-full md:w-[48%] flex items-end">
             <button
               type="submit"
@@ -136,6 +151,8 @@ const Form = () => {
           </div>
         </div>
       </motion.form>
+
+      {/* Toast xabari */}
       <AnimatePresence>
         {message && (
           <motion.div

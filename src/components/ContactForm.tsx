@@ -1,21 +1,19 @@
-import { motion /*AnimatePresence*/ } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion /* AnimatePresence */ } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
-// import {
-//   FaRegCheckCircle,
-//   FaTimesCircle,
-//   FaExclamationTriangle,
-// } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha from "../utils/ReCaptcha";
+import ReCaptcha, { ReCaptchaRef } from "../utils/ReCaptcha";
+// import { FaRegCheckCircle, FaTimesCircle, FaExclamationTriangle } from "react-icons/fa";
 
 const ContactForm = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { status, message } = useSelector((state: RootState) => state.form);
+
+  const captchaRef = useRef<ReCaptchaRef>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,9 +26,17 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData)).then((res) => {
+
+    // Captcha token olish
+    const token = await captchaRef.current?.execute();
+    if (!token) {
+      alert("Iltimos, captcha'dan o'ting");
+      return;
+    }
+
+    dispatch(submitForm({ ...formData, captcha: token })).then((res) => {
       if (res.type === "form/submitForm/fulfilled") {
         setFormData({ name: "", phone: "", subject: "" });
       }
@@ -46,19 +52,11 @@ const ContactForm = () => {
     }
   }, [message, dispatch]);
 
-  // const renderIcon = () => {
-  //   if (status === "success")
-  //     return <FaRegCheckCircle size={23} className="text-green-500" />;
-  //   if (status === "error")
-  //     return <FaTimesCircle size={23} className="text-red-500" />;
-  //   if (status === "warning")
-  //     return <FaExclamationTriangle size={23} className="text-orange-500" />;
-  //   return null;
-  // };
-  
   return (
     <>
-      <ReCaptcha />
+      {/* Invisible reCAPTCHA */}
+      <ReCaptcha ref={captchaRef} />
+
       <motion.form
         onSubmit={handleSubmit}
         className="bg-[#0000004D] md:p-[40px] rounded-[25px] md:w-[587px] w-full h-full flex flex-col items-center justify-center md:px-[50px] p-4 space-y-5 md:space-y-[22px]"
@@ -80,6 +78,7 @@ const ContactForm = () => {
               className="w-full h-[40px] bg-[#F4F4F4] border border-[#E8003D] rounded-full outline-none px-4"
             />
           </div>
+
           <div className="w-full md:w-[210px]">
             <label
               htmlFor="phone"
@@ -106,6 +105,7 @@ const ContactForm = () => {
             </div>
           </div>
         </div>
+
         <div className="w-full flex flex-col md:flex-row items-end md:justify-between gap-5">
           <div className="w-full md:w-[210px]">
             <label
@@ -123,6 +123,7 @@ const ContactForm = () => {
               className="w-full h-[40px] bg-[#F4F4F4] border border-[#E8003D] rounded-full outline-none px-4"
             />
           </div>
+
           <div className="w-full md:w-[210px]">
             <button
               type="submit"
@@ -134,19 +135,6 @@ const ContactForm = () => {
           </div>
         </div>
       </motion.form>
-      {/* <AnimatePresence>
-        {message && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="bg-white fixed top-5 left-1/2 -translate-x-1/2 px-5 py-3 z-[9999999999999] rounded-lg flex items-center gap-4 shadow-lg"
-          >
-            {renderIcon()}
-            <p className="text-[16px] font-inter">{message}</p>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
     </>
   );
 };
