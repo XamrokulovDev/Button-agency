@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-number-input";
 import {
@@ -10,60 +10,29 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { clearMessage, submitForm } from "../features/form-contact";
-import ReCaptcha, { ReCaptchaHandle } from "../utils/ReCaptcha";
+import ReCaptcha from "../utils/ReCaptcha";
 
 const Form = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { status, message } = useSelector((state: RootState) => state.form);
-  const recaptchaRef = useRef<ReCaptchaHandle>(null);
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     subject: "",
   });
-  
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // reCAPTCHA tokenini olish
-    let token = captchaToken;
-    if (!token && recaptchaRef.current) {
-      try {
-        token = await recaptchaRef.current.executeAsync();
-        setCaptchaToken(token);
-      } catch (error) {
-        console.error("reCAPTCHA error:", error);
-        return;
-      }
-    }
-
-    if (!token) {
-      alert("Iltimos, captcha'dan o'ting");
-      return;
-    }
-
-    const formDataWithCaptcha = {
-      ...formData,
-      captcha: token
-    };
-
-    dispatch(submitForm(formDataWithCaptcha)).then((res) => {
+    dispatch(submitForm(formData)).then((res) => {
       if (res.type === "form/submitForm/fulfilled") {
         setFormData({ name: "", phone: "", subject: "" });
-        setCaptchaToken(null);
-        // reCAPTCHA'ni reset qilish
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
-        }
       }
     });
   };
@@ -89,6 +58,9 @@ const Form = () => {
 
   return (
     <>
+      <div className="absolute top-0 left-0">
+        <ReCaptcha />
+      </div>
       <motion.form
         onSubmit={handleSubmit}
         className="bg-white md:px-20 p-4 space-y-5 md:space-y-10 rounded-[25px] w-full h-full shadow-lg flex flex-col items-center justify-center"
@@ -157,20 +129,13 @@ const Form = () => {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="w-full h-[70px] bg-[#E8003D] text-[#FFFFFF] font-[400] font-arial text-[18px] leading-[34px] rounded-full disabled:opacity-70 transition-all cursor-pointer"
+              className="w-full h-[50px] bg-[#E8003D] text-[#FFFFFF] font-[400] font-arial text-[18px] leading-[34px] rounded-full disabled:opacity-70 transition-all cursor-pointer"
             >
               {status === "loading" ? t("contact.sending") : t("contact.send")}
             </button>
           </div>
         </div>
-        
-        {/* reCAPTCHA invisible */}
-        <ReCaptcha
-          ref={recaptchaRef}
-          onChange={setCaptchaToken}
-        />
       </motion.form>
-      
       <AnimatePresence>
         {message && (
           <motion.div

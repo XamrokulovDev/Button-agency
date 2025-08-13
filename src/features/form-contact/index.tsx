@@ -16,25 +16,20 @@ const initialState: FormState = {
 export const submitForm = createAsyncThunk(
   "form/submitForm",
   async (
-    formData: { name: string; phone: string; subject: string; captcha: string },
+    formData: { name: string; phone: string; subject: string },
     { rejectWithValue }
   ) => {
     try {
-      const { name, phone, subject, captcha } = formData;
+      const { name, phone, subject } = formData;
 
       if (!name || !phone || !subject) {
         return rejectWithValue(i18n.t("modal_form.warning"));
-      }
-
-      if (!captcha) {
-        return rejectWithValue("Captcha tasdiqlanmagan");
       }
 
       await axios.post(`${_api}/api/contact-request/`, {
         name,
         phone,
         subject,
-        captcha, // captcha tokenini backendga yuborish
       });
       return i18n.t("modal_form.success");
     } catch (error) {
