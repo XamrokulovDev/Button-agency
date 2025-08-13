@@ -1,3 +1,5 @@
+"use client"
+
 import { useRef, forwardRef, useImperativeHandle } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 
@@ -6,7 +8,7 @@ export interface ReCaptchaRef {
   reset: () => void
 }
 
-const ReCaptcha = forwardRef<ReCaptchaRef>((props, ref) => {
+const ReCaptcha = forwardRef<ReCaptchaRef>((_, ref) => {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string
 
