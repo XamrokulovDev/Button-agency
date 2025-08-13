@@ -157,7 +157,7 @@ const Form = () => {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="w-full h-[50px] bg-[#E8003D] text-[#FFFFFF] font-[400] font-arial text-[18px] leading-[34px] rounded-full disabled:opacity-70 transition-all cursor-pointer"
+              className="w-full h-[70px] bg-[#E8003D] text-[#FFFFFF] font-[400] font-arial text-[18px] leading-[34px] rounded-full disabled:opacity-70 transition-all cursor-pointer"
             >
               {status === "loading" ? t("contact.sending") : t("contact.send")}
             </button>
