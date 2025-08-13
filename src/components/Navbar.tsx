@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import DarkLogo from "../assets/logo.svg";
 import LightLogo from "../assets/white_logo.svg";
-// import ModalForm from "./ModalForm";
+import ModalForm from "./ModalForm";
 import ModalRequest from "./ModalRequest";
 import { MdOutlineClose } from "react-icons/md";
 import menu from "../assets/menu.svg";
@@ -398,7 +398,7 @@ export default function Navbar() {
       </AnimatePresence>
       {/* Modallar */}
       <AnimatePresence>
-        {/* {isModalOpen && <ModalForm onClose={() => setIsModalOpen(false)} />} */}
+        {isModalOpen && <ModalForm onClose={() => setIsModalOpen(false)} />}
         {isRequestOpen && (
           <ModalRequest onClose={() => setIsRequestOpen(false)} />
         )}
